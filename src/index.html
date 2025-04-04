@@ -1,14 +1,95 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="./output.css" rel="stylesheet">
-  <title>Weather Forecast Application</title>
-</head>
-<body>
-  <h1 class="text-3xl font-bold text-red-500 border-2 inline-block p-2 rounded-2xl">
-    Hello world!
-  </h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./output.css" rel="stylesheet" />
+    <title>Weather Forecast Application</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="header">
+        <img src="logo.png" alt="logo" />
+        <p>Current Time and Date</p>
+        <a href="#github-link"></a>
+      </header>
+      <div class="search-box"></div>
+      <div class="message-box">
+        Check what the sky has in store—live updates and a 6-day outlook,
+        wherever you are.
+      </div>
+
+      <!-- post-search -->
+      <div class="post-search">
+        <div class="today">
+          <div class="current-weather">
+            <div class="city-date">
+              <p>city name</p>
+              <p>today's date</p>
+            </div>
+            <div class="temp-weather">
+              <p>temperature</p>
+              <p>weather name</p>
+            </div>
+            <img src="weather-icon.png" alt="weather-icon" />
+          </div>
+          <div class="air-conditions">
+            <div class="realfeel">
+              <h2>Real Feel</h2>
+              <p class="realfeel-value">1°C</p>
+            </div>
+            <div class="wind">
+              <h2>Wind</h2>
+              <p class="wind-value">2.01 m/s</p>
+            </div>
+            <div class="clouds">
+              <h2>Clouds</h2>
+              <p class="clouds-value">100%</p>
+            </div>
+            <div class="humidity">
+              <h2>Humidity</h2>
+              <p class="humidity-value">72%</p>
+            </div>
+          </div>
+          <div class="today-forecast">
+            <div class="forecast-card"></div>
+            <!-- add depending on number of forecast -->
+          </div>
+        </div>
+        <div class="weekly">
+          <div class="weekly-card">
+            <div class="day-weather">
+              <p>Wednesday</p>
+              <div class="icon-weatherName">
+                <img src="weather-icon.png" alt="weather-icon" />
+                <p>Scattered Clouds</p>
+              </div>
+            </div>
+            <div class="temp-clouds">
+              <div class="icon-tempText">
+                <img src="thermometer-icon.png" alt="thermometer-icon" />
+                <p>1°C</p>
+              </div>
+              <div class="icon-cloudText">
+                <img src="cloud-icon.png" alt="cloud-icon" />
+                <p>85%</p>
+              </div>
+              <div class="wind-humidity">
+                <div class="icon-windText">
+                  <img src="cloud-icon.png" alt="cloud-icon" />
+                  <p>85%</p>
+                </div>
+                <div class="icon-humidityText">
+                  <img src="humidity-icon.png" alt="humidity-icon" />
+                  <p>73%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- add depending on number of forecast -->
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
