@@ -10,7 +10,7 @@
 
 <body class="bg-gradient-to-b from-sky-700 via-sky-800 to-sky-900 min-h-screen flex items-center justify-center w-full">
   <div
-    class="container max-w-[50%] border-none rounded-2xl p-6 h-[70vh] shadow-xl bg-gradient-to-br from-red-300 via-orange-400 to-purple-500 flex flex-col gap-2 overflow-y-auto">
+    class="container max-w-[50%] border-none rounded-2xl p-6 h-[70vh] shadow-xl bg-gradient-to-br from-red-300 via-orange-400 to-purple-500 flex flex-col gap-2">
     <header
       class="header flex flex-row justify-between items-center border-none px-5 py-3 shadow-xl rounded-sm shadow-md">
       <img src="../assets/weather-logo.png" alt="weather-logo" class="w-[60px]" />
@@ -34,12 +34,12 @@
     </div>
 
     <!-- post-search -->
-    <div class="post-search flex flex-row justify-between w-full h-full">
+    <div class="post-search flex flex-row justify-between w-full h-full overflow-hidden">
       <!-- Today -->
-      <div class="today rounded-xl p-4 w-1/2 text-center shadow-md flex flex-col gap-y-12 h-[100%]">
-        <div class="current-weather flex flex-col gap-y-1">
+      <div class="today rounded-xl p-4 w-1/2 text-center shadow-md flex flex-col gap-y-12 h-[100%] overflow-y-auto">
+        <div class="current-weather flex flex-col gap-2">
           <h2 class="uppercase font-bold">Current Weather</h2>
-          <div class="current-weather-details flex flex-row justify-between">
+          <div class="current-weather-details flex flex-row justify-between items-center">
             <div class="city-date">
               <p>Kolkata, IN</p>
               <p>Today 6 Apr</p>
@@ -48,12 +48,13 @@
               <p>33 °C</p>
               <p>clear sky</p>
             </div>
-            <img src="weather-icon.png" alt="weather-icon" />
+            <!-- <img src="weather-icon.png" alt="weather-icon" /> -->
+            <i class="fa-solid fa-sun fa-xl"></i>
           </div>
         </div>
-        <div class="air-conditions flex flex-col">
+        <div class="air-conditions flex flex-col gap-2">
           <h2 class="uppercase font-bold">Air Conditions</h2>
-          <div class="air-condition-details flex flex-row gap-4 justify-between">
+          <div class="air-condition-details flex flex-row gap-4 justify-between items-center">
             <div class="realfeel flex flex-col">
               <div class="real-header flex flex-row gap-2 items-center">
                 <i class="fa-solid fa-temperature-three-quarters"></i>
@@ -113,35 +114,176 @@
         </div>
       </div>
       <!-- Weekly -->
-      <div class="weekly rounded-xl p-4 w-1/2 text-center">
+      <div class="weekly rounded-xl p-4 w-1/2 text-center overflow-y-auto">
         <h2 class="uppercase font-bold">Weekly Forecast</h2>
-        <div class="weekly-cards flex flex-col">
-          <div class="weekly-card flex flex-row justify-evenly bg-amber-50/10">
-            <div class="day-weather">
-              <p>Wednesday</p>
-              <div class="icon-weatherName">
-                <img src="weather-icon.png" alt="weather-icon" />
-                <p>Scattered Clouds</p>
+        <div class="weekly-cards flex flex-col gap-3">
+          <div class="weekly-card flex flex-row justify-between bg-amber-50/10 p-2">
+            <div class="day-weather flex flex-col items-start">
+              <p>Tuesday</p>
+              <div class="icon-weatherName flex flex-row gap-2 items-center">
+                <!-- <img src="weather-icon.png" alt="weather-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>Overcast Clouds</p>
               </div>
             </div>
-            <div class="temp-clouds">
-              <div class="icon-tempText">
-                <img src="thermometer-icon.png" alt="thermometer-icon" />
+            <div class="temp-clouds flex flex-col items-center">
+              <div class="icon-tempText flex flex-row gap-2 items-center">
+                <!-- <img src="thermometer-icon.png" alt="thermometer-icon" /> -->
+                <i class="fa-solid fa-temperature-three-quarters"></i>
                 <p>1°C</p>
               </div>
-              <div class="icon-cloudText">
-                <img src="cloud-icon.png" alt="cloud-icon" />
+              <div class="icon-cloudText flex flex-row gap-2 items-center">
+                <!-- <img src="cloud-icon.png" alt="cloud-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
                 <p>85%</p>
               </div>
-              <div class="wind-humidity">
-                <div class="icon-windText">
-                  <img src="cloud-icon.png" alt="cloud-icon" />
-                  <p>85%</p>
-                </div>
-                <div class="icon-humidityText">
-                  <img src="humidity-icon.png" alt="humidity-icon" />
-                  <p>73%</p>
-                </div>
+            </div>
+            <div class="wind-humidity flex flex-col items-center">
+              <div class="icon-windText flex flex-row gap-2 items-center">
+                <!-- <img src="cloud-icon.png" alt="cloud-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>85%</p>
+              </div>
+              <div class="icon-humidityText flex flex-row gap-2 items-center">
+                <!-- <img src="humidity-icon.png" alt="humidity-icon" /> -->
+                <i class="fa-solid fa-droplet"></i>
+                <p>73%</p>
+              </div>
+            </div>
+          </div>
+          <div class="weekly-card flex flex-row justify-between bg-amber-50/10 p-2">
+            <div class="day-weather flex flex-col items-start">
+              <p>Tuesday</p>
+              <div class="icon-weatherName flex flex-row gap-2 items-center">
+                <!-- <img src="weather-icon.png" alt="weather-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>Overcast Clouds</p>
+              </div>
+            </div>
+            <div class="temp-clouds flex flex-col items-center">
+              <div class="icon-tempText flex flex-row gap-2 items-center">
+                <!-- <img src="thermometer-icon.png" alt="thermometer-icon" /> -->
+                <i class="fa-solid fa-temperature-three-quarters"></i>
+                <p>1°C</p>
+              </div>
+              <div class="icon-cloudText flex flex-row gap-2 items-center">
+                <!-- <img src="cloud-icon.png" alt="cloud-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>85%</p>
+              </div>
+            </div>
+            <div class="wind-humidity flex flex-col items-center">
+              <div class="icon-windText flex flex-row gap-2 items-center">
+                <!-- <img src="cloud-icon.png" alt="cloud-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>85%</p>
+              </div>
+              <div class="icon-humidityText flex flex-row gap-2 items-center">
+                <!-- <img src="humidity-icon.png" alt="humidity-icon" /> -->
+                <i class="fa-solid fa-droplet"></i>
+                <p>73%</p>
+              </div>
+            </div>
+          </div>
+          <div class="weekly-card flex flex-row justify-between bg-amber-50/10 p-2">
+            <div class="day-weather flex flex-col items-start">
+              <p>Tuesday</p>
+              <div class="icon-weatherName flex flex-row gap-2 items-center">
+                <!-- <img src="weather-icon.png" alt="weather-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>Overcast Clouds</p>
+              </div>
+            </div>
+            <div class="temp-clouds flex flex-col items-center">
+              <div class="icon-tempText flex flex-row gap-2 items-center">
+                <!-- <img src="thermometer-icon.png" alt="thermometer-icon" /> -->
+                <i class="fa-solid fa-temperature-three-quarters"></i>
+                <p>1°C</p>
+              </div>
+              <div class="icon-cloudText flex flex-row gap-2 items-center">
+                <!-- <img src="cloud-icon.png" alt="cloud-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>85%</p>
+              </div>
+            </div>
+            <div class="wind-humidity flex flex-col items-center">
+              <div class="icon-windText flex flex-row gap-2 items-center">
+                <!-- <img src="cloud-icon.png" alt="cloud-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>85%</p>
+              </div>
+              <div class="icon-humidityText flex flex-row gap-2 items-center">
+                <!-- <img src="humidity-icon.png" alt="humidity-icon" /> -->
+                <i class="fa-solid fa-droplet"></i>
+                <p>73%</p>
+              </div>
+            </div>
+          </div>
+          <div class="weekly-card flex flex-row justify-between bg-amber-50/10 p-2">
+            <div class="day-weather flex flex-col items-start">
+              <p>Tuesday</p>
+              <div class="icon-weatherName flex flex-row gap-2 items-center">
+                <!-- <img src="weather-icon.png" alt="weather-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>Overcast Clouds</p>
+              </div>
+            </div>
+            <div class="temp-clouds flex flex-col items-center">
+              <div class="icon-tempText flex flex-row gap-2 items-center">
+                <!-- <img src="thermometer-icon.png" alt="thermometer-icon" /> -->
+                <i class="fa-solid fa-temperature-three-quarters"></i>
+                <p>1°C</p>
+              </div>
+              <div class="icon-cloudText flex flex-row gap-2 items-center">
+                <!-- <img src="cloud-icon.png" alt="cloud-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>85%</p>
+              </div>
+            </div>
+            <div class="wind-humidity flex flex-col items-center">
+              <div class="icon-windText flex flex-row gap-2 items-center">
+                <!-- <img src="cloud-icon.png" alt="cloud-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>85%</p>
+              </div>
+              <div class="icon-humidityText flex flex-row gap-2 items-center">
+                <!-- <img src="humidity-icon.png" alt="humidity-icon" /> -->
+                <i class="fa-solid fa-droplet"></i>
+                <p>73%</p>
+              </div>
+            </div>
+          </div>
+          <div class="weekly-card flex flex-row justify-between bg-amber-50/10 p-2">
+            <div class="day-weather flex flex-col items-start">
+              <p>Tuesday</p>
+              <div class="icon-weatherName flex flex-row gap-2 items-center">
+                <!-- <img src="weather-icon.png" alt="weather-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>Overcast Clouds</p>
+              </div>
+            </div>
+            <div class="temp-clouds flex flex-col items-center">
+              <div class="icon-tempText flex flex-row gap-2 items-center">
+                <!-- <img src="thermometer-icon.png" alt="thermometer-icon" /> -->
+                <i class="fa-solid fa-temperature-three-quarters"></i>
+                <p>1°C</p>
+              </div>
+              <div class="icon-cloudText flex flex-row gap-2 items-center">
+                <!-- <img src="cloud-icon.png" alt="cloud-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>85%</p>
+              </div>
+            </div>
+            <div class="wind-humidity flex flex-col items-center">
+              <div class="icon-windText flex flex-row gap-2 items-center">
+                <!-- <img src="cloud-icon.png" alt="cloud-icon" /> -->
+                <i class="fa-solid fa-regular fa-cloud"></i>
+                <p>85%</p>
+              </div>
+              <div class="icon-humidityText flex flex-row gap-2 items-center">
+                <!-- <img src="humidity-icon.png" alt="humidity-icon" /> -->
+                <i class="fa-solid fa-droplet"></i>
+                <p>73%</p>
               </div>
             </div>
           </div>
