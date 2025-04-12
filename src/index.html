@@ -7,12 +7,13 @@
   <link href="./output.css" rel="stylesheet" />
   <title>Weather | Current and 5-days Forecast</title>
   <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body
   class="bg-gradient-to-b from-sky-700 via-sky-800 to-sky-900 min-h-screen flex items-center justify-center w-full text-white font-body select-none">
   <div id="container"
-    class="w-full max-w-screen-lg mx-auto border-none rounded-2xl p-4 h-[70vh] shadow-xl bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 flex flex-col gap-4">
+    class="w-full max-w-screen-lg mx-auto border-none rounded-2xl p-4 h-[70vh] shadow-xl bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 flex flex-col gap-4 transition-all duration-300 ease-in-out">
     <header id="header"
       class="flex flex-row justify-between items-center border-none px-5 py-3 rounded-sm shadow-md">
       <img src="../assets/weather-logo.png" alt="weather-logo" class="w-[60px]" />
@@ -28,9 +29,9 @@
             fill="#FFFFFF" />
         </svg></a>
     </header>
-    <div id="search-box" class="flex flex-row gap-2 w-full items-center justify-center">
+    <div id="search-box" class="flex flex-row gap-2 w-full items-center justify-center relative">
       <div id="inputSearch" class="flex-grow">
-        <input type="text" id="inputBox"
+        <input type="text" id="inputBox" autocomplete="off"
           class="bg-white/20 text-white font-medium shadow-2xl w-full py-2 px-3 rounded-sm outline-none"
           placeholder="Search for a City">
       </div>
@@ -39,12 +40,17 @@
         <!-- <img src="location.svg" alt="pinpoint-logo" class="w-6 h-6"> -->
         <i class="fa-solid fa-location-dot fa-xl"></i>
       </div>
+      <p id="error" class="text-red-600 absolute top-11 left-1 font-semibold"></p>
     </div>
     <div id="message-box"
-      class="w-full bg-gradient-to-tr bg-transparent h-full text-center flex items-center justify-center flex-col gap-6 text-2xl overflow-y-auto rounded-sm opacity-70">
+      class="w-full bg-gradient-to-tr bg-transparent h-full text-center flex items-center justify-center flex-col gap-6 text-2xl overflow-y-auto rounded-sm">
       <img src="../assets/weather-hero.svg" alt="weather-hero-icon" class="w-[180px]">
       <p class="w-[80%]">Check what the sky has in store—live updates and a 5-day outlook, wherever you are.</p>
     </div>
+
+    <div id="loader" class="hidden w-full h-full text-center flex items-center justify-center flex-col">
+      <img src="../assets/radio-icon.svg" alt="Loading..." class="w-[80px] h-[80px]">
+    </div>    
 
     <!-- post-search -->
     <div id="post-search" class="flex flex-row justify-between w-full h-full overflow-hidden mt-8 hidden">
@@ -69,28 +75,28 @@
           <div id="air-condition-details" class="flex flex-row gap-4 justify-between items-center">
             <div id="realfeel" class="flex flex-col items-center justify-center gap-3">
               <div id="real-header" class="flex flex-row gap-2 items-center text-white/70 text-[13px]">
-                <i class="fa-solid fa-temperature-three-quarters"></i>
+                <i class='bx bxs-thermometer bx-xs opacity-70' style='color:#ffffff' ></i>
                 <h2>Real Feel</h2>
               </div>
               <p id="realfeel-value" class="font-medium text-lg"></p>
             </div>
             <div id="wind" class="flex flex-col items-center justify-center gap-3">
               <div id="wind-header" class="flex flex-row gap-2 items-center text-white/70 text-[13px]">
-                <i class="fa-solid fa-wind"></i>
+                <i class='bx bx-wind opacity-70' style='color:#ffffff' ></i>
                 <h2>Wind</h2>
               </div>
               <p id="wind-value" class="font-medium text-lg"></p>
             </div>
             <div id="clouds" class="flex flex-col items-center justify-center gap-3">
               <div id="clouds-header" class="flex flex-row gap-2 items-center text-white/70 text-[13px]">
-                <i class="fa-solid fa-regular fa-cloud"></i>
+                <i class='bx bx-cloud bx-xs opacity-70' style='color:#ffffff' ></i>
                 <h2>Clouds</h2>
               </div>
               <p id="clouds-value" class="font-medium text-lg"></p>
             </div>
             <div id="humidity" class="flex flex-col items-center justify-center gap-3">
               <div id="humidity-header" class="flex flex-row gap-2 items-center text-white/70 text-[13px]">
-                <i class="fa-solid fa-droplet"></i>
+                <i class='bx bx-droplet opacity-70' style='color:#ffffff' ></i>
                 <h2>Humidity</h2>
               </div>
               <p id="humidity-value" class="font-medium text-lg"></p>

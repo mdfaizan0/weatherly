@@ -1,3 +1,11 @@
+let API = {
+    URL: "https://api.openweathermap.org/data/2.5",
+    KEY: "***REMOVED***"
+}
+let message = document.getElementById("message-box")
+let loader = document.getElementById("loader")
+let container = document.getElementById("container")
+
 function setDateTime() {
     let now = new Date()
     document.getElementById("currentDate").textContent = now.toLocaleString('en-US', { dateStyle: 'full' })
@@ -8,17 +16,32 @@ setInterval(setDateTime, 1000);
 let input = document.getElementById("inputBox")
 input.addEventListener("keyup", (e) => {
     if (e.key == "Enter") {
-        document.getElementById("message-box").classList.add("hidden")
-        document.getElementById("post-search").classList.remove("hidden")
+        if (!input.value) {
+            return;
+        }
 
-        document.getElementById("container").classList.remove("h-[70vh]")
-        document.getElementById("container").classList.add("max-h-[75vh]")
+        if (input.value.length < 2) {
+            document.getElementById("error").textContent = `Please enter more than ${input.value.length} letter.`
+            setTimeout(() => {
+                document.getElementById("error").textContent = ""
+            }, 2000)
+            return;
+        }
 
-
+        if (input.value == " " || input.value.trim().length < 1) {
+            message.innerHTML = ""
+            message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
+                                <p class="font-semibold">Invalid Input, try entering a location name.</p>`
+            input.value = "";
+            return;
+        }
         if (input.value.trim().length > 1) {
-            console.log(input.value)
+            loader.classList.remove("hidden")
+            document.getElementById("post-search").classList.add("hidden")
+            document.getElementById("message-box").classList.add("hidden")
+            setContainerHeightToDefault()
             getData(input.value)
-            input.value = ""
+            input.value = "";
         }
     }
 })
@@ -26,18 +49,38 @@ input.addEventListener("keyup", (e) => {
 setDateTime()
 
 async function getData(input) {
+    input = input.trim()
+    if (!input || input.length <= 1) {
+        console.log("Invalid or empty input received.")
+        return
+    }
+
     try {
-        let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${input}&appid=***REMOVED***&units=metric`)
-        let responseForecast = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${input}&appid=***REMOVED***&units=metric`)
+        let response = await fetch(`${API.URL}/weather?q=${input}&appid=${API.KEY}&units=metric`)
+        let responseForecast = await fetch(`${API.URL}/forecast?q=${input}&appid=${API.KEY}&units=metric`)
         if (!response.ok) {
-            console.log(`${response.status}: ${response.statusText}`)
+            setContainerHeightToDefault()
+            message.classList.remove("hidden")
+            loader.classList.add("hidden")
+            document.getElementById("post-search").classList.add("hidden")
+            message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
+                                <p class="font-semibold">${response.status}: ${response.statusText == "Not Found" ? "City Not Found" : response.statusText}</p>`
+            return
         }
         if (!responseForecast.ok) {
-            console.log(`${responseForecast.status}: ${responseForecast.statusText}`)
+            setContainerHeightToDefault()
+            message.classList.remove("hidden")
+            loader.classList.add("hidden")
+            document.getElementById("post-search").classList.add("hidden")
+            message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
+                                <p class="font-semibold">${responseForecast.status}: ${response.statusText == "Not Found" ? "Forecast Unavailable" : "Unknown Error Occured"}</p>`
+            return
         }
         let data = await response.json()
         let dataForecast = await responseForecast.json()
         updateCurrentWeather(data)
+        console.log(data)
+        console.log(dataForecast)
         updateTodayForecast(dataForecast)
         groupForecastByDate(dataForecast)
     } catch (error) {
@@ -45,10 +88,39 @@ async function getData(input) {
     }
 }
 
+function setContainerHeightToDefault() {
+    container.classList.remove("max-h-[75vh]")
+    container.classList.add("h-[70vh]")
+}
+
+function setContainerHeightForPostSearch() {
+    container.classList.remove("h-[70vh]")
+    container.classList.add("max-h-[75vh]")
+}
+
+function showPostSearchLayout() {
+    document.getElementById("message-box").classList.add("hidden")
+    document.getElementById("post-search").classList.remove("hidden")
+    setContainerHeightForPostSearch()
+    loader.classList.add("hidden")
+}
+
 function updateCurrentWeather(data) {
+    showPostSearchLayout()
+
     let cityName = data.name
     let country = data.sys.country
     let temperature = Math.round(data.main.temp)
+    if (temperature > 100 || temperature < -50) {
+        setContainerHeightToDefault()
+        message.classList.remove("hidden")
+        loader.classList.add("hidden")
+        document.getElementById("post-search").classList.add("hidden")
+        message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
+                            <p class="font-semibold">Weather data seems invalid. Please try again.</p>`
+        return
+    }
+
     let weatherDescrip = data.weather[0].description
     let feelsLike = Math.round(data.main.feels_like)
     let windSpeed = data.wind.speed
@@ -139,7 +211,7 @@ function calculateDailyAverages(object) {
     let today = new Date().toISOString().split("T")[0];
 
     for (const key in object) {
-        if(key === today) continue;
+        if (key === today) continue;
         let dayArray = object[key]
 
         let hottestItem = dayArray.reduce((prev, curr) => {
@@ -177,7 +249,7 @@ function updateWeeklyForecast(array) {
     array.map(element => {
         let iconCode = element.icon
         let iconUrl = `../assets/icons/${iconCode}.png`
-        let dayName = new Date(element.date).toLocaleDateString('en-US', { weekday: "short", month: "long", day: "numeric"})
+        let dayName = new Date(element.date).toLocaleDateString('en-US', { weekday: "short", month: "long", day: "numeric" })
 
         html += `<div class="weekly-card flex flex-row justify-between bg-amber-50/10 px-4 py-2 rounded-md shadow-md">
                     <div class="day-weather flex flex-col items-start gap-2.5">
@@ -189,21 +261,21 @@ function updateWeeklyForecast(array) {
                         </div>
                         <div class="temp-clouds flex flex-col items-center gap-3">
                         <div class="icon-tempText flex flex-row gap-2 items-center">
-                            <i class="fa-solid fa-temperature-three-quarters opacity-70 fa-xs"></i>
+                            <i class='bx bxs-thermometer opacity-70' style='color:#ffffff' ></i>
                             <p class="weekly-temp font-medium text-sm">${element.temp}°C</p>
                         </div>
                         <div class="icon-cloudText flex flex-row gap-2 items-center">
-                            <i class="fa-solid fa-regular fa-cloud opacity-70 fa-xs"></i>
+                            <i class='bx bx-cloud opacity-70' style='color:#ffffff' ></i>
                             <p class="weekly-cloud-percentage font-medium text-sm">${element.clouds}%</p>
                         </div>
                         </div>
                         <div class="wind-humidity flex flex-col items-center gap-3">
                         <div class="icon-windText flex flex-row gap-2 items-center">
-                            <i class="fa-solid fa-wind opacity-70 fa-xs"></i>
+                            <i class='bx bx-wind opacity-70' style='color:#ffffff' ></i>
                             <p class="weekly-wind-speed font-medium text-sm">${element.wind} m/s</p>
                         </div>
                         <div class="icon-humidityText flex flex-row gap-2 items-center">
-                            <i class="fa-solid fa-droplet opacity-70 fa-xs"></i>
+                            <i class='bx bx-droplet opacity-70' style='color:#ffffff' ></i>
                             <p class="weekly-humidity-percentage font-medium text-sm">${element.humidity}%</p>
                         </div>
                     </div>
