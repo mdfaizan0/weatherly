@@ -12,8 +12,86 @@ function setDateTime() {
     document.getElementById("currentTime").textContent = now.toLocaleString('en-US', { timeStyle: 'short' })
 }
 setInterval(setDateTime, 1000);
+setDateTime()
+
+let locationPin = document.getElementById("currentLocation")
+locationPin.addEventListener("click", () => {
+    document.getElementById("post-search").classList.add("hidden")
+    message.classList.remove("hidden")
+    container.classList.add("h-[70vh]")
+    message.innerHTML = `<img src="../assets/icons/location-arrow.png" alt="weather-hero-icon" class="w-[120px] rotate-45 mb-3">
+                         <p class="font-semibold">Please allow the location request</p>`
+
+    navigator.geolocation.getCurrentPosition((position) => {
+        loader.classList.remove("hidden")
+        document.getElementById("post-search").classList.add("hidden")
+        document.getElementById("message-box").classList.add("hidden")
+        setContainerHeightToDefault()
+        getCurrentData(position.coords)
+    }, (error) => {
+        if (error.code == 1) {
+            message.innerHTML = `<img src="../assets/icons/unknown-pin.png" alt="weather-hero-icon" class="w-[180px]">
+                                <p class="font-semibold w-[80%]">Location permission denied, please enable GPS, try again later or try searching a city name</p>`
+        }
+        if (error.code == 2) {
+            message.innerHTML = `<img src="../assets/icons/unknown-pin.png" alt="weather-hero-icon" class="w-[180px]">
+                                <p class="font-semibold w-[80%]">Location unavailable, please try again later or try searching a city name</p>`
+        }
+        if (error.code == 3) {
+            message.innerHTML = `<img src="../assets/icons/unknown-pin.png" alt="weather-hero-icon" class="w-[180px]">
+                                <p class="font-semibold w-[80%]">Location request timed-out, please try again</p>`
+        }
+    }, { timeout: 5000 })
+})
 
 let input = document.getElementById("inputBox")
+let dropdown = document.getElementById("dropdown")
+
+input.addEventListener("click", () => {
+    let recent = JSON.parse(localStorage.getItem("recentSearches"))
+    
+    if (!recent || recent.length === 0) return
+
+    dropdown.classList.remove("hidden")
+    input.classList.add("rounded-b-none")
+
+    let html = ""
+    recent.map(city => {
+        html += `<span class="py-1 px-2 cursor-pointer rounded transition duration-300 ease-in-out hover:bg-white/30">${city.charAt(0).toUpperCase() + city.slice(1)}</span>`
+    })
+    dropdown.innerHTML = html
+})
+
+input.addEventListener("input", () => {
+    let recent = JSON.parse(localStorage.getItem("recentSearches"))
+    
+    if (!recent || recent.length === 0) return
+
+    dropdown.classList.remove("hidden")
+    input.classList.add("rounded-b-none")
+
+    let html = ""
+    recent.map(city => {
+        html += `<span class="py-1 px-2 cursor-pointer rounded transition duration-300 ease-in-out hover:bg-white/30">${city.charAt(0).toUpperCase() + city.slice(1)}</span>`
+    })
+    dropdown.innerHTML = html
+})
+
+input.addEventListener("blur", () => {
+    setTimeout(() => {
+        dropdown.classList.add("hidden")
+        input.classList.remove("rounded-b-none")
+    }, 150)
+})
+
+dropdown.addEventListener("click", (e) => {
+    if (e.target.nodeName == "SPAN") {
+        getCityData(e.target.textContent)
+        dropdown.classList.add("hidden")
+        input.classList.remove("rounded-b-none")
+    }
+})
+
 input.addEventListener("keyup", (e) => {
     if (e.key == "Enter") {
         if (!input.value) {
@@ -40,15 +118,15 @@ input.addEventListener("keyup", (e) => {
             document.getElementById("post-search").classList.add("hidden")
             document.getElementById("message-box").classList.add("hidden")
             setContainerHeightToDefault()
-            getData(input.value)
+            getCityData(input.value)
             input.value = "";
+            dropdown.classList.add("hidden")
+            input.classList.remove("rounded-b-none")
         }
     }
 })
 
-setDateTime()
-
-async function getData(input) {
+async function getCityData(input) {
     input = input.trim()
     if (!input || input.length <= 1) {
         console.log("Invalid or empty input received.")
@@ -79,8 +157,39 @@ async function getData(input) {
         let data = await response.json()
         let dataForecast = await responseForecast.json()
         updateCurrentWeather(data)
-        console.log(data)
-        console.log(dataForecast)
+        updateRecentSearches(input)
+        updateTodayForecast(dataForecast)
+        groupForecastByDate(dataForecast)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function getCurrentData(coords) {
+    try {
+        let response = await fetch(`${API.URL}/weather?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API.KEY}&units=metric`)
+        let responseForecast = await fetch(`${API.URL}/forecast?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API.KEY}&units=metric`)
+        if (!response.ok) {
+            setContainerHeightToDefault()
+            message.classList.remove("hidden")
+            loader.classList.add("hidden")
+            document.getElementById("post-search").classList.add("hidden")
+            message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
+                                <p class="font-semibold">${response.status}: ${response.statusText == "Not Found" ? "City Not Found" : response.statusText}</p>`
+            return
+        }
+        if (!responseForecast.ok) {
+            setContainerHeightToDefault()
+            message.classList.remove("hidden")
+            loader.classList.add("hidden")
+            document.getElementById("post-search").classList.add("hidden")
+            message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
+                                <p class="font-semibold">${responseForecast.status}: ${response.statusText == "Not Found" ? "Forecast Unavailable" : "Unknown Error Occured"}</p>`
+            return
+        }
+        let data = await response.json()
+        let dataForecast = await responseForecast.json()
+        updateCurrentWeather(data)
         updateTodayForecast(dataForecast)
         groupForecastByDate(dataForecast)
     } catch (error) {
@@ -144,7 +253,7 @@ function updateCurrentWeather(data) {
     let img = document.createElement("img")
     img.setAttribute("src", iconUrl)
     img.setAttribute("alt", weatherDescrip)
-    img.classList.add("w-13", "h-13")
+    img.classList.add("w-16", "h-16")
     document.getElementById("weatherIcon").innerHTML = ""
     document.getElementById("weatherIcon").appendChild(img)
 }
@@ -266,7 +375,7 @@ function updateWeeklyForecast(array) {
                         </div>
                         <div class="icon-cloudText flex flex-row gap-2 items-center">
                             <i class='bx bx-cloud opacity-70' style='color:#ffffff' ></i>
-                            <p class="weekly-cloud-percentage font-medium text-sm">${element.clouds}%</p>
+                            <p class="weekly-cloud-percentage font-medium text-sm">${element.clouds == 0 ? "-" : element.clouds + "%"}</p>
                         </div>
                         </div>
                         <div class="wind-humidity flex flex-col items-center gap-3">
@@ -282,4 +391,17 @@ function updateWeeklyForecast(array) {
                 </div>`
     });
     weeklyParent.innerHTML = html
+}
+
+function updateRecentSearches(input) {
+    let lowerInput = input.toLowerCase().trim()
+    let recent = JSON.parse(localStorage.getItem("recentSearches")) || []
+    if (!recent.includes(lowerInput)) {
+        recent.unshift(lowerInput)
+    } else {
+        recent.splice(recent.indexOf(lowerInput), 1)
+        recent.unshift(lowerInput)
+    }
+    if (recent.length > 5) recent.pop()
+    localStorage.setItem("recentSearches", JSON.stringify(recent))
 }

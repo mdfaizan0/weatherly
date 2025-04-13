@@ -11,46 +11,54 @@
 </head>
 
 <body
-  class="bg-gradient-to-b from-sky-700 via-sky-800 to-sky-900 min-h-screen flex items-center justify-center w-full text-white font-body select-none">
+  class="bg-gradient-to-b from-sky-700 via-sky-800 to-sky-900 min-h-screen flex items-center justify-center w-full text-white font-body select-none box-border">
   <div id="container"
     class="w-full max-w-screen-lg mx-auto border-none rounded-2xl p-4 h-[70vh] shadow-xl bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 flex flex-col gap-4 transition-all duration-300 ease-in-out">
-    <header id="header"
-      class="flex flex-row justify-between items-center border-none px-5 py-3 rounded-sm shadow-md">
+    <header id="header" class="flex flex-row justify-between items-center border-none px-5 py-3 rounded-sm shadow-md">
       <img src="../assets/weather-logo.png" alt="weather-logo" class="w-[60px]" />
       <div id="current-date-time" class="flex flex-col gap-2 justify-center items-center">
         <p id="currentDate" class="text-white text-md font-semibold opacity-80"></p>
         <p id="currentTime" class="text-white text-md font-semibold opacity-80"></p>
       </div>
-      <a target="_blank" href="https://www.github.com/mdfaizan0">
-        <svg id="github-logo" class="w-9 fill-black hover:fill-[#000000] transition-colors duration-200"
-          viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd"
-            d="M7.49936 0.850006C3.82767 0.850006 0.849976 3.8273 0.849976 7.50023C0.849976 10.4379 2.75523 12.9306 5.39775 13.8104C5.73047 13.8712 5.85171 13.6658 5.85171 13.4895C5.85171 13.3315 5.846 12.9135 5.84273 12.3587C3.99301 12.7604 3.60273 11.4671 3.60273 11.4671C3.30022 10.6988 2.86423 10.4942 2.86423 10.4942C2.26044 10.0819 2.90995 10.0901 2.90995 10.0901C3.57742 10.137 3.9285 10.7755 3.9285 10.7755C4.52167 11.7916 5.48512 11.4981 5.86396 11.3279C5.92438 10.8984 6.09625 10.6053 6.28608 10.4391C4.80948 10.2709 3.25695 9.70063 3.25695 7.15241C3.25695 6.42615 3.51618 5.83298 3.94157 5.368C3.87299 5.1998 3.64478 4.52375 4.00689 3.60807C4.00689 3.60807 4.56494 3.42926 5.83538 4.28941C6.36568 4.14204 6.93477 4.06856 7.50018 4.0657C8.06518 4.06856 8.63386 4.14204 9.16498 4.28941C10.4346 3.42926 10.9918 3.60807 10.9918 3.60807C11.3548 4.52375 11.1266 5.1998 11.0584 5.368C11.4846 5.83298 11.7418 6.42615 11.7418 7.15241C11.7418 9.70716 10.1868 10.2693 8.70571 10.4338C8.94412 10.6392 9.15681 11.045 9.15681 11.6655C9.15681 12.5542 9.14865 13.2715 9.14865 13.4895C9.14865 13.6675 9.26867 13.8745 9.60588 13.8095C12.2464 12.9282 14.15 10.4375 14.15 7.50023C14.15 3.8273 11.1723 0.850006 7.49936 0.850006Z"
-            fill="#FFFFFF" />
-        </svg></a>
+      <a target="_blank" href="https://www.github.com/mdfaizan0"
+        class="text-4xl w-9 text-white transition-colors duration-200 hover:text-amber-600">
+        <i class="fa-brands fa-github"></i>
+      </a>
     </header>
     <div id="search-box" class="flex flex-row gap-2 w-full items-center justify-center relative">
-      <div id="inputSearch" class="flex-grow">
+      <div id="inputSearch" class="flex-grow relative">
         <input type="text" id="inputBox" autocomplete="off"
-          class="bg-white/20 text-white font-medium shadow-2xl w-full py-2 px-3 rounded-sm outline-none"
+          class="bg-white/20 text-white font-medium shadow-2xl w-full py-2 px-3 rounded-sm border-none outline-none transition-all ease-in-out"
           placeholder="Search for a City">
+
+        <div id="dropdown"
+          class="absolute top-10 flex flex-col bg-white/20 w-full left-0 right-0 px-2 py-3 pt-1 gap-2 rounded-xl rounded-t-none hidden">
+        </div>
+
       </div>
+
       <div class="text-white">|</div>
-      <div id="currentLocation" class="flex items-center justify-center py-3 px-2 cursor-pointer">
-        <!-- <img src="location.svg" alt="pinpoint-logo" class="w-6 h-6"> -->
-        <i class="fa-solid fa-location-dot fa-xl"></i>
+
+      <div id="currentLocation"
+        class="text-2xl flex items-center justify-center py-3 px-2 cursor-pointer transition-colors duration-500 ease-in-out hover:text-amber-600"
+        title="Search by current location">
+        <i class="fa-solid fa-location-dot"></i>
       </div>
-      <p id="error" class="text-red-600 absolute top-11 left-1 font-semibold"></p>
+
+      <p id="error" class="text-red-600 absolute bottom-11 left-1 font-semibold"></p>
+
     </div>
+
     <div id="message-box"
       class="w-full bg-gradient-to-tr bg-transparent h-full text-center flex items-center justify-center flex-col gap-6 text-2xl overflow-y-auto rounded-sm">
       <img src="../assets/weather-hero.svg" alt="weather-hero-icon" class="w-[180px]">
-      <p class="w-[80%]">Check what the sky has in store—live updates and a 5-day outlook, wherever you are.</p>
+      <p class="w-[80%] font-semibold">Check what the sky has in store—live updates and a 5-day outlook, wherever you
+        are.</p>
     </div>
 
     <div id="loader" class="hidden w-full h-full text-center flex items-center justify-center flex-col">
       <img src="../assets/radio-icon.svg" alt="Loading..." class="w-[80px] h-[80px]">
-    </div>    
+    </div>
 
     <!-- post-search -->
     <div id="post-search" class="flex flex-row justify-between w-full h-full overflow-hidden mt-8 hidden">
@@ -75,28 +83,28 @@
           <div id="air-condition-details" class="flex flex-row gap-4 justify-between items-center">
             <div id="realfeel" class="flex flex-col items-center justify-center gap-3">
               <div id="real-header" class="flex flex-row gap-2 items-center text-white/70 text-[13px]">
-                <i class='bx bxs-thermometer bx-xs opacity-70' style='color:#ffffff' ></i>
+                <i class='bx bxs-thermometer bx-xs opacity-70' style='color:#ffffff'></i>
                 <h2>Real Feel</h2>
               </div>
               <p id="realfeel-value" class="font-medium text-lg"></p>
             </div>
             <div id="wind" class="flex flex-col items-center justify-center gap-3">
               <div id="wind-header" class="flex flex-row gap-2 items-center text-white/70 text-[13px]">
-                <i class='bx bx-wind opacity-70' style='color:#ffffff' ></i>
+                <i class='bx bx-wind opacity-70' style='color:#ffffff'></i>
                 <h2>Wind</h2>
               </div>
               <p id="wind-value" class="font-medium text-lg"></p>
             </div>
             <div id="clouds" class="flex flex-col items-center justify-center gap-3">
               <div id="clouds-header" class="flex flex-row gap-2 items-center text-white/70 text-[13px]">
-                <i class='bx bx-cloud bx-xs opacity-70' style='color:#ffffff' ></i>
+                <i class='bx bx-cloud bx-xs opacity-70' style='color:#ffffff'></i>
                 <h2>Clouds</h2>
               </div>
               <p id="clouds-value" class="font-medium text-lg"></p>
             </div>
             <div id="humidity" class="flex flex-col items-center justify-center gap-3">
               <div id="humidity-header" class="flex flex-row gap-2 items-center text-white/70 text-[13px]">
-                <i class='bx bx-droplet opacity-70' style='color:#ffffff' ></i>
+                <i class='bx bx-droplet opacity-70' style='color:#ffffff'></i>
                 <h2>Humidity</h2>
               </div>
               <p id="humidity-value" class="font-medium text-lg"></p>
