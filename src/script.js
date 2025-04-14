@@ -19,7 +19,7 @@ locationPin.addEventListener("click", () => {
     document.getElementById("post-search").classList.add("hidden")
     message.classList.remove("hidden")
     container.classList.add("h-[70vh]")
-    message.innerHTML = `<img src="../assets/icons/location-arrow.png" alt="weather-hero-icon" class="w-[120px] rotate-45 mb-3">
+    message.innerHTML = `<img src="../assets/icons/location-arrow.png" alt="weather-hero-icon" class="w-[100px] sm:w-[140px] md:w-[180px] rotate-45 mb-3">
                          <p class="font-semibold">Please allow the location request</p>`
 
     navigator.geolocation.getCurrentPosition((position) => {
@@ -96,10 +96,11 @@ input.addEventListener("keyup", (e) => {
         }
 
         if (input.value.length < 2) {
+            document.getElementById("error").classList.remove("hidden")
             document.getElementById("error").textContent = `Please enter more than ${input.value.length} letter.`
             setTimeout(() => {
                 document.getElementById("error").textContent = ""
-            }, 2000)
+            }, 2500)
             return;
         }
 
@@ -177,14 +178,15 @@ async function getCurrentData(coords) {
 }
 
 function setContainerHeightToDefault() {
-    container.classList.remove("max-h-[75vh]")
-    container.classList.add("h-[70vh]")
+    container.classList.remove("max-h-[75vh]", "h-[70vh]")
+    container.classList.add("h-screen", "sm:h-[70vh]")
 }
 
 function setContainerHeightForPostSearch() {
-    container.classList.remove("h-[70vh]")
-    container.classList.add("max-h-[75vh]")
+    container.classList.remove("h-screen", "sm:h-[70vh]")
+    container.classList.add("max-h-full", "sm:max-h-[75vh]")
 }
+
 
 function showPostSearchLayout() {
     document.getElementById("message-box").classList.add("hidden")
@@ -225,12 +227,8 @@ function updateCurrentWeather(data) {
     document.getElementById("clouds-value").textContent = `${clouds == 0 ? "-" : clouds + "%"}`
     document.getElementById("humidity-value").textContent = `${humidity}%`
 
-    let img = document.createElement("img")
-    img.setAttribute("src", iconUrl)
-    img.setAttribute("alt", weatherDescrip)
-    img.classList.add("w-16", "h-16")
     document.getElementById("weatherIcon").innerHTML = ""
-    document.getElementById("weatherIcon").appendChild(img)
+    document.getElementById("weatherIcon").innerHTML = `<img src="${iconUrl}" alt="${weatherDescrip}" class="w-12 h-12 lg:w-16 lg:h-16">`
 }
 
 function formattedDate() {
@@ -337,7 +335,7 @@ function updateWeeklyForecast(array) {
 
         html += `<div class="weekly-card flex flex-row justify-between bg-amber-50/10 px-4 py-2 rounded-md shadow-md">
                     <div class="day-weather flex flex-col items-start gap-2.5">
-                        <p class="weekly-day-name font-semibold">${dayName}</p>
+                        <p class="weekly-day-name font-semibold text-sm">${dayName}</p>
                         <div class="icon-weatherName flex flex-row gap-2 justify-center">
                             <img src="${iconUrl}" alt="${element.description}" class="w-5 h-5"/>
                             <p class="weekly-weather-descrip text-[14px] font-header text-white/60">${element.description}</p>
@@ -386,7 +384,7 @@ function showAPIError(response, errorText) {
     loader.classList.add("hidden")
     document.getElementById("post-search").classList.add("hidden")
     message.innerHTML = ""
-    message.innerHTML = `<img src="../assets/icons/unknown.png" alt="unknown-icon" class="w-[180px]">
+    message.innerHTML = `<img src="../assets/icons/unknown.png" alt="unknown-icon" class="w-[100px] sm:w-[140px] md:w-[180px]">
                          <p class="font-semibold w-[80%]">${response.status}: ${response.statusText == "Not Found" ? errorText : response.statusText}</p>`
 }
 
@@ -395,6 +393,6 @@ function showError(errorText, imgText) {
     loader.classList.add("hidden")
     document.getElementById("post-search").classList.add("hidden")
     message.innerHTML = ""
-    message.innerHTML = `<img src="../assets/icons/${imgText}.png" alt="${imgText}" class="w-[180px]">
+    message.innerHTML = `<img src="../assets/icons/${imgText}.png" alt="${imgText}" class="w-[100px] sm:w-[140px] md:w-[180px]">
                          <p class="font-semibold w-[80%]">${errorText}</p>`
 }
