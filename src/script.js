@@ -30,16 +30,13 @@ locationPin.addEventListener("click", () => {
         getCurrentData(position.coords)
     }, (error) => {
         if (error.code == 1) {
-            message.innerHTML = `<img src="../assets/icons/unknown-pin.png" alt="weather-hero-icon" class="w-[180px]">
-                                <p class="font-semibold w-[80%]">Location permission denied, please enable GPS, try again later or try searching a city name</p>`
+            showError("Location permission denied, please enable GPS, try again later or try searching a city name", "unknown-pin")
         }
         if (error.code == 2) {
-            message.innerHTML = `<img src="../assets/icons/unknown-pin.png" alt="weather-hero-icon" class="w-[180px]">
-                                <p class="font-semibold w-[80%]">Location unavailable, please try again later or try searching a city name</p>`
+            showError("Location unavailable, please try again later or try searching a city name", "unknown-pin")
         }
         if (error.code == 3) {
-            message.innerHTML = `<img src="../assets/icons/unknown-pin.png" alt="weather-hero-icon" class="w-[180px]">
-                                <p class="font-semibold w-[80%]">Location request timed-out, please try again</p>`
+            showError("Location request timed-out, please try again", "unknown-pin")
         }
     }, { timeout: 5000 })
 })
@@ -49,7 +46,7 @@ let dropdown = document.getElementById("dropdown")
 
 input.addEventListener("click", () => {
     let recent = JSON.parse(localStorage.getItem("recentSearches"))
-    
+
     if (!recent || recent.length === 0) return
 
     dropdown.classList.remove("hidden")
@@ -64,7 +61,7 @@ input.addEventListener("click", () => {
 
 input.addEventListener("input", () => {
     let recent = JSON.parse(localStorage.getItem("recentSearches"))
-    
+
     if (!recent || recent.length === 0) return
 
     dropdown.classList.remove("hidden")
@@ -107,9 +104,7 @@ input.addEventListener("keyup", (e) => {
         }
 
         if (input.value == " " || input.value.trim().length < 1) {
-            message.innerHTML = ""
-            message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
-                                <p class="font-semibold">Invalid Input, try entering a location name.</p>`
+            showError("Invalid Input, try entering a location name", "unknown")
             input.value = "";
             return;
         }
@@ -129,7 +124,7 @@ input.addEventListener("keyup", (e) => {
 async function getCityData(input) {
     input = input.trim()
     if (!input || input.length <= 1) {
-        console.log("Invalid or empty input received.")
+        showError("Invalid or empty input received.", "unknown")
         return
     }
 
@@ -138,20 +133,12 @@ async function getCityData(input) {
         let responseForecast = await fetch(`${API.URL}/forecast?q=${input}&appid=${API.KEY}&units=metric`)
         if (!response.ok) {
             setContainerHeightToDefault()
-            message.classList.remove("hidden")
-            loader.classList.add("hidden")
-            document.getElementById("post-search").classList.add("hidden")
-            message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
-                                <p class="font-semibold">${response.status}: ${response.statusText == "Not Found" ? "City Not Found" : response.statusText}</p>`
+            showAPIError(response, "City Not Found")
             return
         }
         if (!responseForecast.ok) {
             setContainerHeightToDefault()
-            message.classList.remove("hidden")
-            loader.classList.add("hidden")
-            document.getElementById("post-search").classList.add("hidden")
-            message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
-                                <p class="font-semibold">${responseForecast.status}: ${response.statusText == "Not Found" ? "Forecast Unavailable" : "Unknown Error Occured"}</p>`
+            showAPIError(responseForecast, "Forecast Unavailable")
             return
         }
         let data = await response.json()
@@ -171,20 +158,12 @@ async function getCurrentData(coords) {
         let responseForecast = await fetch(`${API.URL}/forecast?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API.KEY}&units=metric`)
         if (!response.ok) {
             setContainerHeightToDefault()
-            message.classList.remove("hidden")
-            loader.classList.add("hidden")
-            document.getElementById("post-search").classList.add("hidden")
-            message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
-                                <p class="font-semibold">${response.status}: ${response.statusText == "Not Found" ? "City Not Found" : response.statusText}</p>`
+            showAPIError(response, "City Not Found")
             return
         }
         if (!responseForecast.ok) {
             setContainerHeightToDefault()
-            message.classList.remove("hidden")
-            loader.classList.add("hidden")
-            document.getElementById("post-search").classList.add("hidden")
-            message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
-                                <p class="font-semibold">${responseForecast.status}: ${response.statusText == "Not Found" ? "Forecast Unavailable" : "Unknown Error Occured"}</p>`
+            showAPIError(responseForecast, "Forecast Unavailable")
             return
         }
         let data = await response.json()
@@ -222,11 +201,7 @@ function updateCurrentWeather(data) {
     let temperature = Math.round(data.main.temp)
     if (temperature > 100 || temperature < -50) {
         setContainerHeightToDefault()
-        message.classList.remove("hidden")
-        loader.classList.add("hidden")
-        document.getElementById("post-search").classList.add("hidden")
-        message.innerHTML = `<img src="../assets/icons/unknown.png" alt="weather-hero-icon" class="w-[180px]">
-                            <p class="font-semibold">Weather data seems invalid. Please try again.</p>`
+        showError("Weather data seems invalid. Please try again", "unknown")
         return
     }
 
@@ -404,4 +379,22 @@ function updateRecentSearches(input) {
     }
     if (recent.length > 5) recent.pop()
     localStorage.setItem("recentSearches", JSON.stringify(recent))
+}
+
+function showAPIError(response, errorText) {
+    message.classList.remove("hidden")
+    loader.classList.add("hidden")
+    document.getElementById("post-search").classList.add("hidden")
+    message.innerHTML = ""
+    message.innerHTML = `<img src="../assets/icons/unknown.png" alt="unknown-icon" class="w-[180px]">
+                         <p class="font-semibold w-[80%]">${response.status}: ${response.statusText == "Not Found" ? errorText : response.statusText}</p>`
+}
+
+function showError(errorText, imgText) {
+    message.classList.remove("hidden")
+    loader.classList.add("hidden")
+    document.getElementById("post-search").classList.add("hidden")
+    message.innerHTML = ""
+    message.innerHTML = `<img src="../assets/icons/${imgText}.png" alt="${imgText}" class="w-[180px]">
+                         <p class="font-semibold w-[80%]">${errorText}</p>`
 }
