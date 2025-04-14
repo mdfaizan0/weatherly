@@ -7,12 +7,17 @@ let loader = document.getElementById("loader")
 let container = document.getElementById("container")
 
 function setDateTime() {
-    let now = new Date()
-    document.getElementById("currentDate").textContent = now.toLocaleString('en-US', { dateStyle: 'full' })
-    document.getElementById("currentTime").textContent = now.toLocaleString('en-US', { timeStyle: 'short' })
+    const now = new Date()
+    document.getElementById("currentDate").textContent =
+        now.toLocaleString('en-US', { dateStyle: 'full' })
+    document.getElementById("currentTime").textContent =
+        now.toLocaleString('en-US', { timeStyle: 'short' })
 }
-setInterval(setDateTime, 1000);
+
+setInterval(setDateTime, 1000)
 setDateTime()
+
+
 
 let locationPin = document.getElementById("currentLocation")
 locationPin.addEventListener("click", () => {
@@ -50,11 +55,12 @@ input.addEventListener("click", () => {
     if (!recent || recent.length === 0) return
 
     dropdown.classList.remove("hidden")
+    document.getElementById("currentDate").classList.add("invisible")
     input.classList.add("rounded-b-none")
 
     let html = ""
     recent.map(city => {
-        html += `<span class="py-1 px-2 cursor-pointer rounded transition duration-300 ease-in-out hover:bg-white/30">${city.charAt(0).toUpperCase() + city.slice(1)}</span>`
+        html += `<span class="py-1 px-2 cursor-pointer rounded transition duration-300 ease-in-out hover:bg-white/30 z-50">${city.charAt(0).toUpperCase() + city.slice(1)}</span>`
     })
     dropdown.innerHTML = html
 })
@@ -65,6 +71,7 @@ input.addEventListener("input", () => {
     if (!recent || recent.length === 0) return
 
     dropdown.classList.remove("hidden")
+    document.getElementById("currentDate").classList.add("invisible")
     input.classList.add("rounded-b-none")
 
     let html = ""
@@ -77,6 +84,7 @@ input.addEventListener("input", () => {
 input.addEventListener("blur", () => {
     setTimeout(() => {
         dropdown.classList.add("hidden")
+        document.getElementById("currentDate").classList.remove("invisible")
         input.classList.remove("rounded-b-none")
     }, 150)
 })
@@ -178,13 +186,13 @@ async function getCurrentData(coords) {
 }
 
 function setContainerHeightToDefault() {
-    container.classList.remove("max-h-[75vh]", "h-[70vh]")
+    container.classList.remove("max-h-[80vh]", "h-[70vh]")
     container.classList.add("h-screen", "sm:h-[70vh]")
 }
 
 function setContainerHeightForPostSearch() {
     container.classList.remove("h-screen", "sm:h-[70vh]")
-    container.classList.add("max-h-full", "sm:max-h-[75vh]")
+    container.classList.add("max-h-full", "sm:max-h-[80vh]")
 }
 
 
@@ -262,12 +270,12 @@ function updateTodayForecast(data) {
         let temp = Math.round(item.main.temp)
 
         html += `<div class="today-forecast-card bg-amber-50/10 px-3.5 py-2 rounded-md shadow-md flex flex-col gap-3">
-                                        <p class="today-forcast-time text-[12px] text-white/70">${formattedtime}</p>
-                                        <div class="today-forecast-temp flex flex-col items-center gap-1">
-                                            <img src="${iconUrl}" alt="${weatherDescrip}" title="${weatherDescrip}" class="w-6 h-6">
-                                            <p class="today-forecast-temp font-medium uppercase text-sm">${temp}°C</p>
-                                        </div>
-                                        </div>`
+                 <p class="today-forcast-time text-[12px] text-white/70">${formattedtime}</p>
+                 <div class="today-forecast-temp flex flex-col items-center gap-1">
+                    <img src="${iconUrl}" alt="${weatherDescrip}" title="${weatherDescrip}" class="w-6 h-6">
+                    <p class="today-forecast-temp font-medium uppercase text-sm">${temp}°C</p>
+                 </div>
+                 </div>`
     })
     document.getElementById("today-forecast-cards").innerHTML = html
 }
@@ -395,4 +403,5 @@ function showError(errorText, imgText) {
     message.innerHTML = ""
     message.innerHTML = `<img src="../assets/icons/${imgText}.png" alt="${imgText}" class="w-[100px] sm:w-[140px] md:w-[180px]">
                          <p class="font-semibold w-[80%]">${errorText}</p>`
+    setContainerHeightToDefault()                         
 }
