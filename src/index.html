@@ -4,10 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind's output.css -->
   <link href="./output.css" rel="stylesheet" />
-  <title>Weatherly | Current and 5-days Forecast</title>
+  <title>Weatherly | Current Weather and 5-days Forecast</title>
+
+  <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+
+  <!-- CDN for BoxIcons -->
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  
+  <!-- Style tag to cater custom scrollbar for supported browsers-->
   <style>
     ::-webkit-scrollbar {
       width: 8px;
@@ -29,40 +37,58 @@
   </style>
 </head>
 
+<!-- Body with dark gradient and centered content -->
 <body
   class="bg-gradient-to-b from-sky-700 via-sky-800 to-sky-900 min-h-screen flex items-center justify-center w-full text-white font-body select-none">
+
+  <!-- Container with two states — message-box(pre-search) and post-search, with light foreground for better contrast. With responsive behavior for desktop (70vh), iPad Mini(80vh) and iPhone SE(100vh). -->
   <div id="container"
     class="w-full h-screen max-w-screen-lg md:w-[90%] md:h-[80vh] lg:h-[70vh] mx-auto sm:rounded-none md:rounded-2xl lg:rounded-2xl p-4 shadow-xl bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 flex flex-col gap-2">
+
+    <!-- Header containing three major components — logo, app name and github link to my profile. -->
     <header id="header" role="banner"
       class="flex flex-row justify-between items-center border-none pt-4 lg:px-5 lg:py-3 md:px-5 md:py-3 rounded-sm md:shadow-md lg:shadow-md">
+
+      <!-- Logo -->
       <img src="../assets/weather-logo.png" alt="weather-logo" class="w-[60px]" />
+
+      <!-- App name with glow effect for aesthetics -->
       <h1 class="font-brand text-3xl sm:text-4xl font-extrabold hover:animate-pulse transition-all duration-500">
         <span class="text-amber-300 drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]">Weather</span><span
           class="text-white/80 drop-shadow-[0_0_4px_rgba(255,255,255,1)]">ly</span>
       </h1>
+
+      <!-- GitHub Logo with link to my profile with hover effect and tooltip. -->
       <a target="_blank" href="https://www.github.com/mdfaizan0" title="Visit my GitHub"
         class="text-4xl w-9 text-white transition-colors duration-200 hover:text-amber-600">
         <i class="fa-brands fa-github"></i>
       </a>
     </header>
+
+    <!-- Search-box div containing primarily 4 items — input, separator, error and location-pin icon. -->
     <div id="search-box" class="w-full flex flex-row gap-2 items-center justify-center relative sm:mt-0 mt-5">
 
+      <!-- Input box to capture city names with event listeners. -->
       <div id="inputSearch" class="w-full sm:flex-grow relative">
         <input type="text" id="inputBox" autocomplete="off"
           class="bg-white/30 text-white font-medium shadow-2xl w-full py-2 px-3 rounded-sm border-none outline-none transition-all ease-in-out sm:text-md"
           placeholder="Search for a City">
 
+        <!-- Dropdown with event listeners to show when there is any input or click on input-box. No dropdown when no searches made yet. -->
         <div id="dropdown"
           class="absolute top-10 flex flex-col bg-white/30 w-full left-0 right-0 px-2 py-3 pt-1 gap-2 rounded-xl rounded-t-none hidden">
         </div>
+
+        <!-- Error to pop-up when trying to search less than 2 letters. -->
         <p id="error"
           class="absolute -top-6 left-1 sm:bottom-[-2.5rem] sm:left-1 font-semibold text-red-500 text-sm sm:text-base italic drop-shadow-sm">
         </p>
-
       </div>
 
+      <!-- Separator — on big screens. -->
       <div class="text-white hidden sm:block">|</div>
 
+      <!-- Location-pin from FontAwesome to cater current location requests with hover effect and tooltip. -->
       <div id="currentLocation"
         class="text-2xl flex items-center justify-center py-2 sm:py-3 px-2 cursor-pointer transition-colors duration-500 ease-in-out hover:text-amber-600"
         title="Search by current location">
@@ -70,6 +96,7 @@
       </div>
     </div>
 
+    <!-- Current time and date according to user's location. -->
     <div id="current-date-time" class="flex flex-row gap-1 justify-between items-center leading-none z-0">
       <p id="currentDate"
         class="text-white text-[12px] md:text-[14px] lg:text-[16px] font-semibold opacity-80 font-mono">
@@ -79,6 +106,7 @@
       </p>
     </div>
 
+    <!-- Message box to show relevant messages like introductory tip, API error message, asking location permission, normal error messages, etc. -->
     <div id="message-box"
       class="w-full bg-gradient-to-tr bg-transparent h-full text-center flex items-center justify-center flex-col gap-6 sm:text-xl lg:text-2xl overflow-y-auto rounded-sm">
       <img src="../assets/weather-hero.svg" alt="weather-hero-icon" class="w-[100px] sm:w-[140px] md:w-[180px]">
@@ -87,18 +115,24 @@
       </p>
     </div>
 
+    <!-- Loader icon to show when waiting, to fill the state of an empty container. -->
     <div id="loader" class="hidden w-full h-full text-center flex items-center justify-center flex-col">
       <img src="../assets/radio-icon.svg" alt="Loading..." class="w-[80px] h-[80px]">
     </div>
 
-    <!-- post-search -->
+    <!-- Post search state to cater details like — Current Weather, Today Forecast (3-hour interval) and Weekly Forecast. Hidden when DOM content is loaded.-->
     <div id="post-search"
       class="flex flex-col md:flex-row lg:flex-row justify-between w-full h-full overflow-hidden mt-8 hidden">
-      <!-- Today -->
+      
+      <!-- Today section including Current Weather and Today Forecast. -->
       <div id="today"
-        class="rounded-xl p-2 md:w-1/2 lg:w-1/2 text-center flex flex-col gap-y-10 md:gap-y-8 max-h-full overflow-y-auto">
+        class="rounded-xl p-2 md:w-1/2 lg:w-1/2 text-center flex flex-col gap-y-10 md:gap-y-6 max-h-full overflow-y-auto">
+
+        <!-- Current Weather responsible to show Current Weather and Today Forecast (3-hour interval). -->
         <div id="current-weather" class="flex flex-col gap-2">
           <h2 class="uppercase text-white/70 text-lg font-bold font-header">Current Weather</h2>
+
+          <!-- Current Weather Deatils responsible to show details like location name, date, temperature, kind of weather and its icon based on OpenWeatherMap API. -->
           <div id="current-weather-details" class="flex flex-row justify-between lg:justify-evenly items-center">
             <div class="city-date">
               <p id="cityName" class="font-semibold uppercase"></p>
@@ -111,8 +145,12 @@
             <div id="weatherIcon"></div>
           </div>
         </div>
+
+        <!-- Air Condition section responsible to show its header and the details about Air Condtions. -->
         <div id="air-conditions" class="flex flex-col gap-4">
           <h2 class="uppercase text-white/70 text-lg font-bold font-header">Air Conditions</h2>
+
+          <!-- Air Condition Details is responsible to show details like real feel, wind speed, clouds percentage and humidity percentage based on OpenWeatherMap API. -->
           <div id="air-condition-details"
             class="flex flex-row gap-2 lg:gap-4 justify-between items-center md:grid lg:flex md:grid-cols-2 md:gap-x-6 md:gap-y-4 md:justify-items-center">
             <div id="realfeel" class="flex flex-col items-center justify-center gap-3">
@@ -145,23 +183,35 @@
             </div>
           </div>
         </div>
+
+        <!-- Today Forecast section shows its header, number of forecasts available and includes dynamic cards about weather depending on availability of details of 3-hour interval. -->
         <div id="today-forecast" class="flex flex-col">
           <div id="forecast-detail" class="flex flex-col leading-none">
             <p class="uppercase text-white/70 text-lg font-bold font-header">Today's Forecast</p>
             <small id="todayForecastCount" class="mb-4 text-sky-500"></small>
           </div>
+
+          <!-- Today Forecast Cards to cater dynamic addition of cards with details based on OpenWeatherMap API -->
           <div id="today-forecast-cards" class="flex flex-row flex-wrap justify-center items-center gap-1"></div>
         </div>
       </div>
-      <!-- Weekly -->
+      
+      <!-- Weekly section contains two components — its header and dynamic addition of weekly forecast cards. -->
       <div id="weekly" class="rounded-xl p-2 md:w-1/2 lg:w-1/2 text-center overflow-y-auto flex flex-col gap-2">
         <h2 class="uppercase text-white/70 text-lg font-bold font-header">Weekly Forecast (5-days)</h2>
-        <div id="weekly-cards" class="flex flex-col gap-3 md:gap-5 lg:gap-1.5"></div>
-        <!-- add depending on number of forecast -->
+
+        <!-- Container to add dynamic weekly forecast cards. -->
+        <div id="weekly-cards" class="flex flex-col gap-3 md:gap-5 lg:gap-1.5">
+          <!-- 5 cards gets added here, based on OpenWeatherMap API -->
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- FontAwesome Kit -->
   <script src="https://kit.fontawesome.com/5f0ba5b1f2.js" crossorigin="anonymous"></script>
+
+  <!-- JS file linking -->
   <script src="script.js"></script>
 </body>
 
