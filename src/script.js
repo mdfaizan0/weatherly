@@ -1,10 +1,10 @@
 // GitHub Link: https://github.com/mdfaizan0/weatherly
 
 
-// OpenWeatherMap's base URL and my own API.
+// OpenWeatherMap's base URL and OWM API.
 const API = {
     URL: "https://api.openweathermap.org/data/2.5",
-    KEY: "***REMOVED***"
+    KEY: OWM_API_KEY_HERE
 }
 
 // Basic variables of DOM elements depending on frequency of usage.
