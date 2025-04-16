@@ -1,3 +1,6 @@
+// GitHub Link: https://github.com/mdfaizan0/weatherly
+
+
 // OpenWeatherMap's base URL and my own API.
 const API = {
     URL: "https://api.openweathermap.org/data/2.5",
