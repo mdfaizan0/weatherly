@@ -1,5 +1,5 @@
 // OpenWeatherMap's base URL and my own API.
-let API = {
+const API = {
     URL: "https://api.openweathermap.org/data/2.5",
     KEY: "***REMOVED***"
 }
