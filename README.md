@@ -14,28 +14,36 @@ The app is built using **HTML**, **Tailwind CSS** (via CLI), and **Vanilla JavaS
 ## Live Demo
 
 You can view a live demo of **Weatherly** at [click here](https://weatherly-project.netlify.app/).  
-Feel free to try it directly in your browser.
+Try it directly in your browser to see the weather forecast in action!
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e861297a-6870-4094-81ca-2a3e00803115/deploy-status)](https://app.netlify.com/sites/weatherly-project/deploys)
 
 <br>
 
 ## Built With
 
-- **Frontend**: HTML5, [Tailwind CSS](https://tailwindcss.com/) and Vanilla JavaScript  
-- **APIs**: [OpenWeatherMap Current](https://openweathermap.org/current), [5-Day Forecast](https://openweathermap.org/forecast5), and [Geocoding API](https://openweathermap.org/api/geocoding-api)  
-- **Icons**: [FontAwesome](https://fontawesome.com/), [BoxIcons](https://boxicons.com/)  
+- **Frontend**: HTML5, [Tailwind CSS](https://tailwindcss.com/), Vanilla JavaScript
+
+### APIs:
+- [OpenWeatherMap Current](https://openweathermap.org/current)
+- [5-Day Forecast](https://openweathermap.org/forecast5)
+- [Geocoding API](https://openweathermap.org/api/geocoding-api)
+
+### Resources:
+- **Icons**: [FontAwesome](https://fontawesome.com/), [BoxIcons](https://boxicons.com/)
 - **Images/GIFs**: [FlatIcons](https://www.flaticon.com/), [Loading.io](https://loading.io/)  
 
 <br>
 
 ## Features
 
-- ☁️ Current Weather & Air Conditions  
-- 🌍 Geolocation-based Weather  
-- 📅 5-Day Forecast with Daily Breakdown  
-- 📱 Responsive Design for iPhone SE, iPad Mini & Desktop  
-- ⚠️ Error Handling with user-friendly messages  
-- 📋 Recent Searches (stored locally)  
-- ⏱️ Live Clock (Date & Time)  
+- ☁️ Current Weather & Air Conditions.
+- 🌍 Geolocation-based Weather.
+- 📅 5-Day Forecast with Daily Breakdown.
+- 📱 Responsive Design for iPhone SE, iPad Mini & Desktop.
+- ⚠️ Error Handling with user-friendly messages.
+- 📋 Recent Searches (stored locally).
+- ⏱️ Live Clock (Date & Time).
 
 <br>
 
@@ -45,12 +53,17 @@ Feel free to try it directly in your browser.
 - Click the 📍 icon to get weather for your current location.
 - Your recent searches will appear below the input field for easy re-access.
 - Works across devices — desktop, tablet, and mobile.
+- If the app fails to fetch weather data, it will display an error message.
+- Invalid city names or unsupported locations will prompt a helpful error message.
 
 <br>
 
 ## Setup Instructions
 
-> Make sure you have `Node.js` installed.
+#### Prerequisites
+- A modern web-browser.
+- A OpenWeatherMap's API Key.
+- [`Node.js`](https://nodejs.org/en/download) installed locally (npm is included with Node.js).
 
 #### Clone the project:
 
@@ -78,6 +91,22 @@ npm run dev
 
 > ⚠️ Note: `src/output.css` is auto-generated from Tailwind’s CLI build. Avoid manual changes — modify `input.css` instead.
 
+#### Replace API Key
+
+```javascript
+const API = {
+    URL: "https://api.openweathermap.org/data/2.5",
+    KEY: OWM_API_KEY_HERE
+}
+```
+- Replace `OWM_API_KEY_HERE` with your OWM's API Key, make sure the API Key is in double quotes ("").
+- If you're working in a **public repository** or want to keep your API key secure:
+  * Create `config.js` inside the `src/` directory.
+  * Add `const OWM_API_KEY_HERE = "your_api_here";` in `config.js`.
+  * Replace `your_api_here` with your OWM's API Key.
+  * Make sure to add `config.js` to `.gitignore` to keep it secure.
+
+
 #### Run Project
 
 - Open `src/index.html` directly in your code editor.
@@ -88,14 +117,17 @@ npm run dev
 ## Screenshots
 
 ### *Pre-Search*
+*Shows the layout before the user has entered a city or location.*
 <p align="center">
   <img src="assets/pre-search.png" alt="Pre-Search">
 </p>
 
 ### *Post-Search*
+*Shows the layout after the user has searched for a city or location.*
 <p align="center">
   <img src="assets/post-search.png" alt="Post-Search">
 </p>
+
 
 <br>
 
@@ -114,11 +146,11 @@ npm run dev
     │   ├── radio-icon.svg
     │   ├── weather-hero.svg
     │   └── weather-logo.png
-    ├── node_modules/
+    ├── node_modules/ (automatically generated through npm install)
     ├── src/
     │   ├── index.html
     │   ├── input.css
-    │   ├── output.css
+    │   ├── output.css (automatically generated through npm install)
     │   └── script.js
     ├── .gitignore
     ├── package.json
