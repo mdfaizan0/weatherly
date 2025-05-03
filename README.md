@@ -99,18 +99,19 @@ const API = {
     KEY: OWM_API_KEY_HERE
 }
 ```
-- Replace `OWM_API_KEY_HERE` with your OWM's API Key, make sure the API Key is in double quotes ("").
+- Replace `OWM_API_KEY_HERE` with your OWM's API Key, make sure the API Key is in double quotes (" ").
 - If you're working in a **public repository** or want to keep your API key secure:
   * Create `config.js` inside the `src/` directory.
   * Add `const OWM_API_KEY_HERE = "your_api_here";` in `config.js`.
   * Replace `your_api_here` with your OWM's API Key.
+  * Add `config.js` to `src/index.html` with a `<script>` tag.
   * Make sure to add `config.js` to `.gitignore` to keep it secure.
 
 
 #### Run Project
 
 - Open `src/index.html` directly in your code editor.
-- For a smoother experience, use a local server like **Live Server** (Ritwick Dey) or **Live Preview** (Microsoft Extension for VS Code) for smoother routing and real-time preview.
+- For a smoother experience, use a local server extension for VS Code like **Ritwick Dey's Live Server** or **Microsoft's Live Preview** for smoother routing and real-time preview.
 
 <br>
 
@@ -128,6 +129,12 @@ const API = {
   <img src="assets/post-search.png" alt="Post-Search">
 </p>
 
+### *Mobile-View*
+*Shows the post search layout in mobile view.*
+<p align="center">
+  <img src="assets/mobile-view.png" alt="Mobile-View" width="250">
+</p>
+
 
 <br>
 
@@ -143,6 +150,7 @@ const API = {
     │   ├── github-logo.svg
     │   ├── post-search.png
     │   ├── pre-search.png
+    │   ├── mobile-view.png
     │   ├── radio-icon.svg
     │   ├── weather-hero.svg
     │   └── weather-logo.png
